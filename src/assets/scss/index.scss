@@ -1,0 +1,609 @@
+/*
+** Variables
+*/
+$app-navigation-height: 56px;
+
+/*
+** Mixins
+*/
+@mixin border-radius($value: 0) {
+  -webkit-border-radius: $value;
+  -moz-border-radius: $value;
+  border-radius: $value;
+}
+
+@mixin flexbox {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+@mixin flex-direction($value: row) {
+  @if $value == row-reverse {
+    -webkit-box-direction: reverse;
+    -webkit-box-orient: horizontal;
+    -moz-box-direction: reverse;
+    -moz-box-orient: horizontal;
+  } @else if $value == column {
+    -webkit-box-direction: normal;
+    -webkit-box-orient: vertical;
+    -moz-box-direction: normal;
+    -moz-box-orient: vertical;
+  } @else if $value == column-reverse {
+    -webkit-box-direction: reverse;
+    -webkit-box-orient: vertical;
+    -moz-box-direction: reverse;
+    -moz-box-orient: vertical;
+  } @else {
+    -webkit-box-direction: normal;
+    -webkit-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -moz-box-orient: horizontal;
+  }
+  -webkit-flex-direction: $value;
+  -ms-flex-direction: $value;
+  flex-direction: $value;
+}
+@mixin flex-wrap($value: nowrap) {
+  // No Webkit/FF Box fallback.
+  -webkit-flex-wrap: $value;
+  @if $value == nowrap {
+    -ms-flex-wrap: none;
+  } @else {
+    -ms-flex-wrap: $value;
+  }
+  flex-wrap: $value;
+}
+@mixin order($int: 0) {
+  -webkit-box-ordinal-group: $int + 1;
+  -moz-box-ordinal-group: $int + 1;
+  -webkit-order: $int;
+  -ms-flex-order: $int;
+  order: $int;
+}
+@mixin flex-grow($int: 1) {
+  -webkit-box-flex: $int;
+  -moz-box-flex: $int;
+  -webkit-flex-grow: $int;
+  -ms-flex: $int;
+  flex-grow: $int;
+}
+@mixin flex-shrink($int: 0) {
+  -webkit-flex-shrink: $int;
+  -moz-flex-shrink: $int;
+  -ms-flex: $int;
+  flex-shrink: $int;
+}
+@mixin flex-basis($value: auto) {
+  -webkit-flex-basis: $value;
+  flex-basis: $value;
+}
+@mixin flex($fg: 1, $fs: 0, $fb: auto) {
+  // Set a variable to be used by box-flex properties
+  $fg-boxflex: $fg;
+
+  // Box-Flex only supports a flex-grow value so lets grab the
+  // first item in the list and just return that.
+  @if type-of($fg) == 'list' {
+    $fg-boxflex: nth($fg, 1);
+  }
+
+  -webkit-box: $fg-boxflex;
+  -moz-box: $fg-boxflex;
+  -webkit-flex: $fg $fs $fb;
+  -ms-flex: $fg $fs $fb;
+  flex: $fg $fs $fb;
+}
+@mixin justify-content($value: flex-start) {
+  @if $value == flex-start {
+    -webkit-box-pack: start;
+    -moz-box-pack: start;
+    -ms-flex-pack: start;
+  } @else if $value == flex-end {
+    -webkit-box-pack: end;
+    -moz-box-pack: end;
+    -ms-flex-pack: end;
+  } @else if $value == space-between {
+    -webkit-box-pack: justify;
+    -moz-box-pack: justify;
+    -ms-flex-pack: justify;
+  } @else if $value == space-around {
+    -ms-flex-pack: distribute;
+  } @else {
+    -webkit-box-pack: $value;
+    -moz-box-pack: $value;
+    -ms-flex-pack: $value;
+  }
+  -webkit-justify-content: $value;
+  justify-content: $value;
+}
+@mixin align-items($value: stretch) {
+  @if $value == flex-start {
+    -webkit-box-align: start;
+    -moz-box-align: start;
+    -ms-flex-align: start;
+  } @else if $value == flex-end {
+    -webkit-box-align: end;
+    -moz-box-align: end;
+    -ms-flex-align: end;
+  } @else {
+    -webkit-box-align: $value;
+    -moz-box-align: $value;
+    -ms-flex-align: $value;
+  }
+  -webkit-align-items: $value;
+  align-items: $value;
+}
+@mixin align-self($value: auto) {
+  // No Webkit Box Fallback.
+  -webkit-align-self: $value;
+  @if $value == flex-start {
+    -ms-flex-item-align: start;
+  } @else if $value == flex-end {
+    -ms-flex-item-align: end;
+  } @else {
+    -ms-flex-item-align: $value;
+  }
+  align-self: $value;
+}
+@mixin align-content($value: stretch) {
+  // No Webkit Box Fallback.
+  -webkit-align-content: $value;
+  @if $value == flex-start {
+    -ms-flex-line-pack: start;
+  } @else if $value == flex-end {
+    -ms-flex-line-pack: end;
+  } @else {
+    -ms-flex-line-pack: $value;
+  }
+  align-content: $value;
+}
+
+/**
+** Imports
+*/
+@import './font/materialIcons/materialIcons';
+
+/*
+** Theme
+*/
+
+$backgroundColor: #ffffff;
+$backgroundColorHighlight: #ffffff;
+$borderColor: #d1d1d1;
+$navigationColor: #ebebeb;
+$textColor: #000000;
+$textColorHighlight: #813e3e;
+
+$themes: (
+  recipe-app: (
+    backgroundColor: #20222e,
+    backgroundColorHighlight: #353b48,
+    borderColor: #414858,
+    navigationColor: #353b48,
+    textColor: #ffffff,
+    textColorHighlight: #6fa8ce,
+  ),
+);
+
+/*
+ * Implementation of themes
+ */
+@mixin themify($themes) {
+  @each $theme, $map in $themes {
+    &.#{$theme},
+    #app-container.#{$theme} & {
+      $theme-map: () !global;
+      @each $key, $submap in $map {
+        $value: map-get(map-get($themes, $theme), '#{$key}');
+        $theme-map: map-merge(
+          $theme-map,
+          (
+            $key: $value,
+          )
+        ) !global;
+      }
+      @content;
+      $theme-map: null !global;
+    }
+  }
+}
+@mixin themifyBeforeAfter($themes) {
+  @each $theme, $map in $themes {
+    #app-container.#{$theme} & {
+      $theme-map: () !global;
+      @each $key, $submap in $map {
+        $value: map-get(map-get($themes, $theme), '#{$key}');
+        $theme-map: map-merge(
+          $theme-map,
+          (
+            $key: $value,
+          )
+        ) !global;
+      }
+      @content;
+      $theme-map: null !global;
+    }
+  }
+}
+
+@function themed($key) {
+  @return map-get($theme-map, $key);
+}
+
+/*
+** General
+*/
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-size: 16px;
+}
+
+header:first-child {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    margin-top: 0;
+  }
+}
+
+p {
+  &:first-child {
+    margin-top: 0;
+  }
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+/*
+** App General
+*/
+
+#app-container {
+  padding-bottom: $app-navigation-height;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  // Theme-Marker
+  color: $textColor;
+  background-color: $backgroundColor;
+  @include themify($themes) {
+    color: themed('textColor');
+    background-color: themed('backgroundColor');
+  }
+}
+
+#app-header {
+  display: flex;
+  height: $app-navigation-height;
+
+  > a#back-to-link {
+    font-size: 24px;
+    padding: 16px 16px 10px;
+
+    // Theme-Marker
+    color: $textColor;
+    @include themify($themes) {
+      color: themed('textColor');
+    }
+  }
+  #app-title {
+    font-size: 20px;
+    line-height: 56px;
+    white-space: nowrap;
+  }
+}
+
+#app-content {
+}
+
+#app-inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+#app-navigation {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: $app-navigation-height;
+
+  // Theme-Marker
+  border-top: 1px solid $borderColor;
+  background-color: $navigationColor;
+  @include themify($themes) {
+    border-top: 1px solid themed('borderColor');
+    background-color: themed('navigationColor');
+  }
+
+  > ul {
+    margin: 0;
+    padding: 0 8px;
+    @include flexbox();
+    @include justify-content(center);
+
+    > li {
+      margin: 0 8px;
+      padding: 0;
+      list-style: none;
+
+      > a {
+        display: block;
+        padding: 7px 4px;
+        text-decoration: none;
+
+        // Theme-Marker
+        color: $textColor;
+        @include themify($themes) {
+          color: themed('textColor');
+        }
+
+        > span {
+          display: block;
+          text-align: center;
+
+          &.icon {
+            > i {
+              font-size: 28px;
+            }
+          }
+
+          &.text {
+            font-size: 9px;
+          }
+        }
+
+        &.active {
+          // Theme-Marker
+          color: $textColorHighlight;
+          @include themify($themes) {
+            color: themed('textColorHighlight');
+          }
+        }
+      }
+    }
+  }
+}
+
+/*
+** Recipe App
+*/
+#app-container.recipe-app {
+}
+
+// Recipe App Components
+.recipe-list {
+  @include flexbox();
+  @include flex-wrap(wrap);
+  padding-left: 16px;
+  padding-right: 16px;
+
+  .recipe-item {
+    width: 100%;
+    padding: 4px 0;
+
+    .recipe-item-inner {
+      @include flexbox();
+      text-decoration: none;
+
+      // Theme-Marker
+      color: $textColor;
+      background-color: $backgroundColorHighlight;
+      @include themify($themes) {
+        background-color: themed('backgroundColorHighlight');
+        color: themed('textColor');
+      }
+
+      .recipe-images {
+        display: block;
+        margin: -1px -1px 0 -1px;
+        height: 0;
+        width: 30%;
+        padding-bottom: 20%;
+        overflow: hidden;
+        background-color: #cccccc;
+        position: relative;
+
+        > div {
+          display: none;
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100%;
+          width: 100%;
+          background-size: cover;
+          background-repeat: no-repeat;
+          background-position: center center;
+
+          &:first-child {
+            display: block;
+          }
+        }
+      }
+
+      .recipe-title {
+        display: block;
+        padding: 10px 10px 10px 15px;
+        width: 70%;
+        font-weight: bold;
+        font-size: 1rem;
+      }
+    }
+  }
+}
+.recipe-details {
+  .recipe-images {
+    display: block;
+    width: 100%;
+    height: 0;
+    padding-bottom: 66.666666%;
+    background-color: #cccccc;
+    position: relative;
+
+    > div {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center center;
+
+      &:first-child {
+        display: block;
+      }
+    }
+  }
+  .recipe-text {
+    position: relative;
+    z-index: 2;
+    margin: -15px 10px 10px;
+    padding: 30px 20px;
+    font-size: 0.875rem;
+
+    // Theme-Marker
+    background: $backgroundColorHighlight;
+    @include themify($themes) {
+      background-color: themed('backgroundColorHighlight');
+    }
+
+    > header {
+      font-size: 1rem;
+    }
+
+    .recipe-description {
+    }
+
+    .recipe-servings,
+    .recipe-ingredients,
+    .recipe-steps {
+      margin-top: 30px;
+      padding-top: 30px;
+
+      // Theme-Marker
+      border-top: 5px dashed $borderColor;
+      @include themify($themes) {
+        border-top: 5px dashed themed('borderColor');
+      }
+
+      &:before {
+        content: 'Zutaten';
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+
+        // Theme-Marker
+        color: $textColorHighlight;
+        @include themifyBeforeAfter($themes) {
+          color: themed('textColorHighlight');
+        }
+      }
+    }
+
+    .recipe-servings {
+      &:before {
+        content: 'Portionen';
+        display: inline-block;
+        padding-right: 10px;
+      }
+    }
+
+    .recipe-ingredients {
+      ol {
+        margin: 10px 0 0;
+        padding: 0;
+
+        > li {
+          padding: 7px 0;
+          list-style: none;
+          @include flexbox();
+          @include justify-content(space-between);
+
+          // Theme-Marker
+          border-bottom: 1px dotted $borderColor;
+          @include themify($themes) {
+            border-bottom: 1px dashed themed('borderColor');
+          }
+
+          > span {
+            display: block;
+
+            &:last-child {
+              > span {
+                padding-left: 4px;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .recipe-steps {
+      &:before {
+        content: 'Arbeitsschritte';
+      }
+
+      ol {
+        margin: 10px 0 0;
+        padding: 0;
+        list-style: none;
+        counter-reset: step-counter;
+
+        > li {
+          padding: 7px 0;
+          counter-increment: step-counter;
+          min-height: 48px;
+          @include flexbox();
+          @include align-items(top);
+
+          &:before {
+            content: counter(step-counter);
+            display: block;
+            line-height: 23px;
+            text-align: center;
+            font-weight: bold;
+            height: 26px;
+            width: 26px;
+            @include border-radius(50%);
+            font-size: 0.75rem;
+            font-weight: bold;
+
+            // Theme-Marker
+            color: $backgroundColorHighlight;
+            border: 1px dashed $backgroundColorHighlight;
+            @include themifyBeforeAfter($themes) {
+              color: lighten(themed('backgroundColorHighlight'), 20%);
+              border: 1px dashed
+                lighten(themed('backgroundColorHighlight'), 20%);
+            }
+          }
+
+          > span {
+            display: block;
+            padding-top: 5px;
+            padding-left: 10px;
+          }
+        }
+      }
+    }
+  }
+}

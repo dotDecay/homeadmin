@@ -1,25 +1,55 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { RecipesApp } from './apps';
+import Helmet from 'react-helmet';
+
+function HomePage() {
+  return (
+    <>
+      <Helmet>
+        <title>Rezepte</title>
+        <meta name='theme-color' content='#ff0000' data-react-helmet='true' />
+      </Helmet>
+      <div>Home</div>
+      <nav>
+        <ul>
+          <li>
+            <Link to='/recipes'>Rezepte</Link>
+          </li>
+        </ul>
+      </nav>
+    </>
+  );
+}
+
+function NotFoundPage() {
+  return (
+    <>
+      <Helmet>
+        <title>Rezepte</title>
+        <meta name='theme-color' content='#ff0000' data-react-helmet='true' />
+      </Helmet>
+      <div>Not Found</div>
+    </>
+  );
+}
 
 function App() {
+  const user = true;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Switch>
+        <Route path='/' component={HomePage} exact />
+        {user && (
+          // Recipe App
+          <Route path='/recipes'>
+            <RecipesApp mainPath='/recipes' />
+          </Route>
+        )}
+        <Route component={NotFoundPage} />
+      </Switch>
+    </Router>
   );
 }
 
