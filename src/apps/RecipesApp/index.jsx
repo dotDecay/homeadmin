@@ -29,6 +29,7 @@ export default function RecipesApp({ mainPath }) {
     <>
       <Helmet>
         <title>Rezepte</title>
+        <meta name='theme-color' content='#20222e' />
       </Helmet>
       <AppContainer navItems={navItems} className='recipe-app'>
         <Route path={mainPath} exact>

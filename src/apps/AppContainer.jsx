@@ -12,8 +12,8 @@ function AppNavigation({ navItems }) {
               return (
                 <li key={key}>
                   <NavLink to={item.to} exact>
-                    <span className='icon'>{item.icon && item.icon}</span>
-                    <span className='text'>{item.title && item.title}</span>
+                    <span className='icon'>{item.icon}</span>
+                    <span className='text'>{item.title}</span>
                   </NavLink>
                 </li>
               );
@@ -31,9 +31,12 @@ function AppInner({ title, backToPath, helmet, children }) {
 
   return (
     <>
-      <Helmet>
-        <title>{helmetString}</title>
-      </Helmet>
+      {helmetString && (
+        <Helmet>
+          <title>{helmetString}</title>
+        </Helmet>
+      )}
+
       <div id='app-inner'>
         <div id='app-header'>
           <Link to={backPath} id='back-to-link'>

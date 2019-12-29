@@ -37,9 +37,10 @@ export default function RecipeList({ data }) {
 
   return (
     <div className='recipe-list'>
-      {isLoading && <p>Warte kurz. Ich lade die Rezepte für dich...</p>}
-
-      {recipeList &&
+      {isLoading ? (
+        <p>Warte kurz. Ich lade die Rezepte für dich...</p>
+      ) : (
+        recipeList &&
         recipeList.map((item, key) => (
           <RecipeListItem
             key={key}
@@ -47,7 +48,8 @@ export default function RecipeList({ data }) {
             images={item.images}
             itemID={item.id}
           />
-        ))}
+        ))
+      )}
     </div>
   );
 }

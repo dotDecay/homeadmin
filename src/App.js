@@ -8,7 +8,6 @@ function HomePage() {
     <>
       <Helmet>
         <title>Rezepte</title>
-        <meta name='theme-color' content='#ff0000' data-react-helmet='true' />
       </Helmet>
       <div>Home</div>
       <nav>
@@ -27,7 +26,6 @@ function NotFoundPage() {
     <>
       <Helmet>
         <title>Rezepte</title>
-        <meta name='theme-color' content='#ff0000' data-react-helmet='true' />
       </Helmet>
       <div>Not Found</div>
     </>
