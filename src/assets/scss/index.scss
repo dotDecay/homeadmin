@@ -250,6 +250,13 @@ body {
   font-size: 16px;
 }
 
+html,
+body,
+#root {
+  height: 100%;
+  overflow: hidden;
+}
+
 header:first-child {
   h1,
   h2,
@@ -275,7 +282,7 @@ p {
 
 #app-container {
   padding-bottom: $app-navigation-height;
-  height: 100vh;
+  height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
 
@@ -286,6 +293,11 @@ p {
     color: themed('textColor');
     background-color: themed('backgroundColor');
   }
+}
+
+#app-inner {
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 #app-header {
@@ -310,11 +322,6 @@ p {
 }
 
 #app-content {
-}
-
-#app-inner {
-  max-width: 800px;
-  margin: 0 auto;
 }
 
 #app-navigation {
@@ -520,10 +527,39 @@ p {
     }
 
     .recipe-servings {
+      @include flexbox();
+      @include justify-content(space-between);
+      font-size: 24px;
+
       &:before {
         content: 'Portionen';
-        display: inline-block;
-        padding-right: 10px;
+      }
+
+      > div {
+        @include flexbox();
+
+        > i {
+          height: 24px;
+          width: 24px;
+          display: block;
+          @include border-radius(50%);
+          font-size: 20px;
+          text-align: center;
+          line-height: 24px;
+
+          // Theme-Marker
+          background-color: $textColorHighlight;
+          color: $backgroundColor;
+          @include themifyBeforeAfter($themes) {
+            background-color: themed('textColorHighlight');
+            color: themed('backgroundColor');
+          }
+        }
+        > span {
+          display: block;
+          width: 40px;
+          text-align: center;
+        }
       }
     }
 
