@@ -23,6 +23,7 @@ export default function RecipeDetails({ data }) {
         if (servingAmount === null) {
           setServingAmount(response.servings);
         }
+        console.log({ response });
       })
       .catch(error => console.log(error));
   }, [servingAmount, itemid]);
