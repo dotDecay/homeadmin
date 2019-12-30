@@ -26,7 +26,7 @@ export default function RecipeList({ data }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://homeadmin.dotdecay.com/api/recipe/read.php`)
+    fetch(`https://dotdecay.com/homeadmin/api/recipe/read.php`)
       .then(res => res.json())
       .then(response => {
         setRecipeList(response.records);

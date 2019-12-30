@@ -12,7 +12,7 @@ export default function RecipeDetails({ data }) {
   let { itemid } = useParams();
 
   useEffect(() => {
-    fetch(`http://homeadmin.dotdecay.com/api/recipe/read_one.php?id=` + itemid)
+    fetch(`https://dotdecay.com/homeadmin/api/recipe/read_one.php?id=` + itemid)
       .then(res => res.json())
       .then(response => {
         if (response.servings) {
