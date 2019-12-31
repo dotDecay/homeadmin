@@ -298,7 +298,7 @@ p {
   padding-bottom: $app-navigation-height;
   height: 100%;
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: scroll;
   font-family: $textFamily;
 
   // Theme-Marker
