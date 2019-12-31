@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
+import RecipeCritiqueIcon from '../RecipeCritiqueIcon';
+
 function RecipeListItem({
   title,
   images,
+  critique,
   healthiness,
   difficulty,
   tags,
@@ -24,6 +27,7 @@ function RecipeListItem({
         </div>
         <div className='recipe-text'>
           <div className='recipe-title'>{title && title}</div>
+          {critique && <RecipeCritiqueIcon critiqueValue={critique} />}
           {healthiness && (
             <div className={'recipe-healthiness factor-' + healthiness}>
               <i className='material-icons'>favorite</i>
@@ -64,6 +68,7 @@ export default function RecipeList({ data }) {
       .then(res => res.json())
       .then(response => {
         setRecipeList(response.records);
+        console.log(response.records);
         setIsLoading(false);
       })
       .catch(error => console.log(error));
@@ -80,6 +85,7 @@ export default function RecipeList({ data }) {
             key={key}
             title={item.title}
             images={item.images}
+            critique={item.critique}
             healthiness={item.healthiness}
             difficulty={item.difficulty}
             tags={item.tags}

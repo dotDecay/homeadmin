@@ -2,6 +2,7 @@
 ** Variables
 */
 $app-navigation-height: 56px;
+$bp-tablet: 750px;
 
 /*
 ** Mixins
@@ -412,6 +413,88 @@ p {
 }
 
 // Recipe App Components
+
+.recipe-critique-icon > i {
+  &.bad {
+    color: #db6e62;
+  }
+  &.good {
+    color: #cee7a6;
+  }
+  &.best {
+    color: #9aca4d;
+  }
+}
+
+.recipe-difficulty,
+.recipe-healthiness {
+  &.factor-1 > i {
+    &:nth-child(1) {
+      opacity: 0.75;
+    }
+  }
+
+  &.factor-2 > i {
+    &:nth-child(1),
+    &:nth-child(2) {
+      opacity: 0.75;
+    }
+  }
+
+  &.factor-3 > i {
+    &:nth-child(1),
+    &:nth-child(2),
+    &:nth-child(3) {
+      opacity: 0.75;
+    }
+  }
+}
+.recipe-difficulty {
+  background-color: #1f1f1f;
+  padding: 10px;
+  @include flexbox();
+  @include transform(rotate(-3deg));
+  @include border-radius(141px 41px 11px 41px/21px 61px 151px 21px);
+
+  > i {
+    display: block;
+    background-image: url('../img/icons/icon-spoon.svg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 45px;
+    width: 14px;
+    opacity: 0.15;
+
+    &:nth-child(1) {
+      @include transform(rotate(-3deg));
+    }
+
+    &:nth-child(2) {
+      @include transform(translateX(-2px) rotate(5deg));
+    }
+
+    &:nth-child(3) {
+      @include transform(rotate(-5deg));
+    }
+  }
+}
+
+.recipe-healthiness {
+  background-color: #1f1f1f;
+  @include border-radius(10px);
+  padding: 10px;
+  @include flexbox();
+  @include transform(rotate(4deg));
+  @include border-radius(141px 11px 11px 41px/11px 61px 31px 11px);
+
+  > i {
+    display: block;
+    letter-spacing: -2px;
+    opacity: 0.15;
+  }
+}
+
 .recipe-list {
   @include flexbox();
   @include flex-wrap(wrap);
@@ -422,10 +505,30 @@ p {
     width: 100%;
     padding: 4px 0;
 
+    &:nth-child(5n - 4) .recipe-item-inner {
+      @include border-radius(41px 11px 141px 11px/11px 61px 11px 31px);
+    }
+
+    &:nth-child(5n - 3) .recipe-item-inner {
+      @include border-radius(141px 11px 11px 41px/11px 61px 31px 11px);
+    }
+
+    &:nth-child(5n - 2) .recipe-item-inner {
+      @include border-radius(4% 24% 71% 38%/53% 11% 12% 10%);
+    }
+
+    &:nth-child(5n - 1) .recipe-item-inner {
+      @include border-radius(41px 250px 41px 250px/250px 41px 250px 41px);
+    }
+
+    &:nth-child(5n) .recipe-item-inner {
+      @include border-radius(250px 41px 250px 41px/41px 250px 41px 250px);
+    }
+
     .recipe-item-inner {
       @include flexbox();
       text-decoration: none;
-      @include border-radius(0 8px 8px 0);
+      overflow: hidden;
 
       // Theme-Marker
       color: $textColor;
@@ -438,12 +541,9 @@ p {
       .recipe-images {
         display: block;
         margin: -1px -1px 0 -1px;
-        height: 0;
         width: 30%;
-        padding-bottom: 20%;
         background-color: #cccccc;
         position: relative;
-        @include border-radius(8px 0 0 8px);
 
         > div {
           display: none;
@@ -464,7 +564,7 @@ p {
 
       .recipe-text {
         display: block;
-        padding: 10px 10px 10px 15px;
+        padding: 10px 10px 36px 15px;
         width: 70%;
         font-weight: bold;
         font-size: 0.75rem;
@@ -474,96 +574,25 @@ p {
           font-size: 1rem;
         }
 
+        .recipe-critique-icon {
+          position: absolute;
+          bottom: 5px;
+          left: 13px;
+        }
+
         > .recipe-difficulty {
           position: absolute;
           bottom: -10px;
           right: -10px;
           background-color: transparent;
-          @include border-radius(10px);
-          padding: 10px;
-          @include flexbox();
           @include transform(scale(0.6));
-
-          > i {
-            display: block;
-            background-image: url('../img/icons/icon-spoon.svg');
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center;
-            height: 45px;
-            width: 14px;
-            opacity: 0.15;
-
-            &:nth-child(1) {
-              @include transform(rotate(-3deg));
-            }
-
-            &:nth-child(2) {
-              @include transform(translateX(-2px) rotate(5deg));
-            }
-
-            &:nth-child(3) {
-              @include transform(rotate(-5deg));
-            }
-          }
-
-          &.factor-1 > i {
-            &:nth-child(1) {
-              opacity: 0.75;
-            }
-          }
-
-          &.factor-2 > i {
-            &:nth-child(1),
-            &:nth-child(2) {
-              opacity: 0.75;
-            }
-          }
-
-          &.factor-3 > i {
-            &:nth-child(1),
-            &:nth-child(2),
-            &:nth-child(3) {
-              opacity: 0.75;
-            }
-          }
         }
         > .recipe-healthiness {
           position: absolute;
           bottom: -5px;
           right: 20px;
           background-color: transparent;
-          @include border-radius(10px);
-          padding: 10px;
-          @include flexbox();
           @include transform(scale(0.6));
-
-          > i {
-            display: block;
-            letter-spacing: -2px;
-            opacity: 0.15;
-          }
-
-          &.factor-1 > i {
-            &:nth-child(1) {
-              opacity: 0.75;
-            }
-          }
-
-          &.factor-2 > i {
-            &:nth-child(1),
-            &:nth-child(2) {
-              opacity: 0.75;
-            }
-          }
-
-          &.factor-3 > i {
-            &:nth-child(1),
-            &:nth-child(2),
-            &:nth-child(3) {
-              opacity: 0.75;
-            }
-          }
         }
 
         .recipe-tags {
@@ -611,7 +640,7 @@ p {
     z-index: 2;
     margin: -15px 10px 10px;
     padding: 30px 20px;
-    @include border-radius(10px);
+    @include border-radius(255px 15px 225px 15px/15px 225px 15px 255px);
 
     // Theme-Marker
     background: $backgroundColorHighlight;
@@ -619,100 +648,21 @@ p {
       background-color: themed('backgroundColorHighlight');
     }
 
-    > .recipe-difficulty {
-      position: absolute;
-      top: -45px;
-      right: 20px;
-      background-color: #1f1f1f;
-      @include border-radius(10px);
-      padding: 10px;
-      @include flexbox();
-      @include transform(rotate(-3deg));
-
-      > i {
-        display: block;
-        background-image: url('../img/icons/icon-spoon.svg');
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center;
-        height: 45px;
-        width: 14px;
-        opacity: 0.15;
-
-        &:nth-child(1) {
-          @include transform(rotate(-3deg));
-        }
-
-        &:nth-child(2) {
-          @include transform(translateX(-2px) rotate(5deg));
-        }
-
-        &:nth-child(3) {
-          @include transform(rotate(-5deg));
-        }
-      }
-
-      &.factor-1 > i {
-        &:nth-child(1) {
-          opacity: 0.75;
-        }
-      }
-
-      &.factor-2 > i {
-        &:nth-child(1),
-        &:nth-child(2) {
-          opacity: 0.75;
-        }
-      }
-
-      &.factor-3 > i {
-        &:nth-child(1),
-        &:nth-child(2),
-        &:nth-child(3) {
-          opacity: 0.75;
-        }
-      }
-    }
-    > .recipe-healthiness {
+    .recipe-healthiness {
       position: absolute;
       top: -28px;
       right: 90px;
-      background-color: #1f1f1f;
-      @include border-radius(10px);
-      padding: 10px;
-      @include flexbox();
-      @include transform(rotate(4deg));
-
-      > i {
-        display: block;
-        letter-spacing: -2px;
-        opacity: 0.15;
-      }
-
-      &.factor-1 > i {
-        &:nth-child(1) {
-          opacity: 0.75;
-        }
-      }
-
-      &.factor-2 > i {
-        &:nth-child(1),
-        &:nth-child(2) {
-          opacity: 0.75;
-        }
-      }
-
-      &.factor-3 > i {
-        &:nth-child(1),
-        &:nth-child(2),
-        &:nth-child(3) {
-          opacity: 0.75;
-        }
-      }
+    }
+    .recipe-difficulty {
+      position: absolute;
+      top: -45px;
+      right: 20px;
     }
 
     > header {
       font-size: 1rem;
+      position: relative;
+      padding-right: 30px;
 
       // Theme-Marker
       font-family: $textFamilyHighlight;
@@ -727,10 +677,16 @@ p {
       > h5 {
         margin: 0;
         background-color: #1f1f1f;
-        @include border-radius(10px);
         padding: 10px;
         display: inline-block;
         @include transform(translateY(-10px) rotate(1deg));
+        @include border-radius(41px 11px 141px 11px/11px 61px 11px 31px);
+      }
+
+      > .recipe-critique-icon {
+        position: absolute;
+        right: 0;
+        top: 0;
       }
     }
 
@@ -817,7 +773,7 @@ p {
           height: 48px;
           width: 48px;
           display: block;
-          @include border-radius(50%);
+          @include border-radius(131px 64px 225px 139px/48px 206px 79px 127px);
           font-size: 36px;
           text-align: center;
           line-height: 48px;
@@ -893,14 +849,15 @@ p {
             font-weight: bold;
             height: 36px;
             width: 36px;
-            @include border-radius(50%);
+            @include border-radius(
+              131px 64px 225px 139px/48px 206px 79px 127px
+            );
             font-size: 1.5rem;
             font-weight: bold;
             position: absolute;
             top: 4px;
             left: 0;
             background-color: #1f1f1f;
-            @include border-radius(10px);
             font-weight: bold;
 
             // Theme-Marker
@@ -916,18 +873,26 @@ p {
 
           &:nth-child(5n-3):before {
             @include transform(rotate(10deg));
+            @include border-radius(
+              127px 144px 235px 199px/336px 206px 289px 167px
+            );
           }
 
           &:nth-child(5n-2):before {
             @include transform(rotate(6deg));
+            @include border-radius(81px 11px 121px 151px/41px 191px 91px 31px);
           }
 
           &:nth-child(5n-1):before {
             @include transform(rotate(-7deg));
+            @include border-radius(
+              121px 111px 411px 21px/201px 431px 81px 191px
+            );
           }
 
           &:nth-child(5n):before {
             @include transform(rotate(-3deg));
+            @include border-radius(11px 11px 11px 11px/11px 11px 11px 31px);
           }
 
           > span {

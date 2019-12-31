@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
+import RecipeCritiqueIcon from '../RecipeCritiqueIcon';
+
 const calcUnits = ({ amount }, { servings }, servingAmount) =>
   (amount / servings) * servingAmount;
 
@@ -19,6 +21,7 @@ export default function RecipeDetails({ data }) {
           response.servings = parseInt(response.servings);
         }
         setRecipeDetail(response);
+        console.log(response);
         setIsLoading(false);
         setServingAmount(previousAmount => {
           if (!previousAmount) {
@@ -92,6 +95,9 @@ export default function RecipeDetails({ data }) {
             )}
             <header>
               <h1 className='recipe-title'>{recipeDetail.title}</h1>
+              {recipeDetail.critique && (
+                <RecipeCritiqueIcon critiqueValue={recipeDetail.critique} />
+              )}
             </header>
             {recipeDetail.description && (
               <div className='recipe-description'>
