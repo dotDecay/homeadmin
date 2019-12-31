@@ -2,6 +2,7 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import { Route } from 'react-router-dom';
 
+import { TagContextProvider } from './context';
 import { AppContainer, AppInner } from '../AppContainer';
 import { RecipeList, RecipeDetail } from './components';
 
@@ -31,19 +32,21 @@ export default function RecipesApp({ mainPath }) {
         <title>Rezepte</title>
         <meta name='theme-color' content='#20222e' />
       </Helmet>
-      <AppContainer navItems={navItems} className='recipe-app'>
-        <Route path={mainPath} exact>
-          <AppInner title='Rezepte'>
-            <RecipeList data={recipeList.recipes} />
-          </AppInner>
-        </Route>
+      <TagContextProvider>
+        <AppContainer navItems={navItems} className='recipe-app'>
+          <Route path={mainPath} exact>
+            <AppInner title='Rezepte'>
+              <RecipeList data={recipeList.recipes} />
+            </AppInner>
+          </Route>
 
-        <Route path={mainPath + '/details/:itemid'} exact>
-          <AppInner title='Rezepte Details' backToPath='/recipes'>
-            <RecipeDetail data={recipeDetail.recipe} />
-          </AppInner>
-        </Route>
-      </AppContainer>
+          <Route path={mainPath + '/details/:itemid'} exact>
+            <AppInner title='Rezepte Details' backToPath='/recipes'>
+              <RecipeDetail data={recipeDetail.recipe} />
+            </AppInner>
+          </Route>
+        </AppContainer>
+      </TagContextProvider>
     </>
   );
 }
