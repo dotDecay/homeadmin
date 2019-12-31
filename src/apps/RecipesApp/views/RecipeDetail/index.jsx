@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import RecipeCritiqueIcon from '../../components/RecipeCritiqueIcon';
+import RecipeCritique from '../../components/RecipeCritique';
 import RecipeDifficulty from '../../components/RecipeDifficulty';
 import RecipeHealthiness from '../../components/RecipeHealthiness';
 
@@ -52,10 +52,6 @@ export default function RecipeDetails({ data }) {
     }
   };
 
-  if (setRecipeDetail.nutritionalValues) {
-    console.log(setRecipeDetail.nutritionalValues);
-  }
-
   return (
     <div className='recipe-details'>
       {isLoading ? (
@@ -81,7 +77,7 @@ export default function RecipeDetails({ data }) {
             <header>
               <h1 className='recipe-title'>{recipeDetail.title}</h1>
               {recipeDetail.critique && (
-                <RecipeCritiqueIcon critiqueValue={recipeDetail.critique} />
+                <RecipeCritique critique={recipeDetail.critique} />
               )}
             </header>
             {recipeDetail.description && (
