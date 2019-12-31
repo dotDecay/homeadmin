@@ -20,13 +20,16 @@ export default function RecipeDetails({ data }) {
         }
         setRecipeDetail(response);
         setIsLoading(false);
-        if (servingAmount === null) {
-          setServingAmount(response.servings);
-        }
-        console.log({ response });
+        setServingAmount(previousAmount => {
+          if (!previousAmount) {
+            return response.servings;
+          }
+
+          return previousAmount;
+        });
       })
       .catch(error => console.log(error));
-  }, [servingAmount, itemid]);
+  }, [itemid]);
 
   const handleServingAmountChange = mode => {
     switch (mode) {
