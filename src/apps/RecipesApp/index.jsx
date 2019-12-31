@@ -18,11 +18,6 @@ const navItems = [
     icon: <i className='material-icons'>local_dining</i>,
     to: '/recipes',
   },
-  {
-    title: 'Details',
-    icon: <i className='material-icons'>local_dining</i>,
-    to: '/recipes/details/2',
-  },
 ];
 
 export default function RecipesApp({ mainPath }) {

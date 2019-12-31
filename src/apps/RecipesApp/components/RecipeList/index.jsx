@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-function RecipeListItem({ title, images, itemID }) {
+function RecipeListItem({
+  title,
+  images,
+  healthiness,
+  difficulty,
+  tags,
+  itemID,
+}) {
   return (
     <div className='recipe-item'>
       <Link to={'/recipes/details/' + itemID} className='recipe-item-inner'>
@@ -15,7 +22,34 @@ function RecipeListItem({ title, images, itemID }) {
               return <div key={key} style={imgStyle}></div>;
             })}
         </div>
-        <div className='recipe-title'>{title && title}</div>
+        <div className='recipe-text'>
+          <div className='recipe-title'>{title && title}</div>
+          {healthiness && (
+            <div className={'recipe-healthiness factor-' + healthiness}>
+              <i className='material-icons'>favorite</i>
+              <i className='material-icons'>favorite</i>
+              <i className='material-icons'>favorite</i>
+            </div>
+          )}
+          {difficulty && (
+            <div className={'recipe-difficulty factor-' + difficulty}>
+              <i></i>
+              <i></i>
+              <i></i>
+            </div>
+          )}
+          {tags && (
+            <div className='recipe-tags'>
+              {tags.map(({ title }, key) => {
+                return (
+                  <i key={key}>
+                    <span>{title}</span>
+                  </i>
+                );
+              })}
+            </div>
+          )}
+        </div>
       </Link>
     </div>
   );
@@ -46,6 +80,9 @@ export default function RecipeList({ data }) {
             key={key}
             title={item.title}
             images={item.images}
+            healthiness={item.healthiness}
+            difficulty={item.difficulty}
+            tags={item.tags}
             itemID={item.id}
           />
         ))

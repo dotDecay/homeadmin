@@ -48,6 +48,10 @@ export default function RecipeDetails({ data }) {
     }
   };
 
+  if (setRecipeDetail.nutritionalValues) {
+    console.log(setRecipeDetail.nutritionalValues);
+  }
+
   return (
     <div className='recipe-details'>
       {isLoading ? (
@@ -64,10 +68,56 @@ export default function RecipeDetails({ data }) {
               })}
           </div>
           <div className='recipe-text'>
+            {recipeDetail.healthiness && (
+              <div
+                className={
+                  'recipe-healthiness factor-' + recipeDetail.healthiness
+                }
+              >
+                <i className='material-icons'>favorite</i>
+                <i className='material-icons'>favorite</i>
+                <i className='material-icons'>favorite</i>
+              </div>
+            )}
+            {recipeDetail.difficulty && (
+              <div
+                className={
+                  'recipe-difficulty factor-' + recipeDetail.difficulty
+                }
+              >
+                <i></i>
+                <i></i>
+                <i></i>
+              </div>
+            )}
             <header>
               <h1 className='recipe-title'>{recipeDetail.title}</h1>
             </header>
-            <div className='recipe-description'>{recipeDetail.description}</div>
+            {recipeDetail.description && (
+              <div className='recipe-description'>
+                {recipeDetail.description}
+              </div>
+            )}
+            {recipeDetail.tags && (
+              <div className='recipe-tags'>
+                {recipeDetail.tags.map(({ title }, key) => {
+                  return (
+                    <i key={key}>
+                      <span>{title}</span>
+                    </i>
+                  );
+                })}
+              </div>
+            )}
+            {recipeDetail.preparationTime && (
+              <div className='recipe-preparation-time'>
+                <i className='material-icons'>timelapse</i>
+                <span>
+                  <b>Zubereitungszeit:</b>
+                  <span>{recipeDetail.preparationTime} Min</span>
+                </span>
+              </div>
+            )}
             <div className='recipe-servings'>
               <div>
                 <i
@@ -117,6 +167,41 @@ export default function RecipeDetails({ data }) {
                 </ol>
               )}
             </div>
+            {recipeDetail.nutritionalValues && (
+              <div className='recipe-nutritional-values'>
+                <i className='material-icons'>pie_chart</i>
+                <span>
+                  <b>Kalorien:</b>
+                  {recipeDetail.nutritionalValues.calories !== null &&
+                  typeof recipeDetail.nutritionalValues.calories !== 'undefined'
+                    ? recipeDetail.nutritionalValues.calories + 'kcal'
+                    : 'k.A.'}
+                  kcal
+                </span>
+                <span>
+                  <b>Kohlenhydrate:</b>
+                  {recipeDetail.nutritionalValues.carbohydrates !== null &&
+                  typeof recipeDetail.nutritionalValues.carbohydrates !==
+                    'undefined'
+                    ? recipeDetail.nutritionalValues.carbohydrates + 'g'
+                    : 'k.A.'}
+                </span>
+                <span>
+                  <b>Eiweiß:</b>
+                  {recipeDetail.nutritionalValues.protein !== null &&
+                  typeof recipeDetail.nutritionalValues.protein !== 'undefined'
+                    ? recipeDetail.nutritionalValues.protein + 'g'
+                    : 'k.A.'}
+                </span>
+                <span>
+                  <b>Fett:</b>
+                  {recipeDetail.nutritionalValues.fat !== null &&
+                  typeof recipeDetail.nutritionalValues.fat !== 'undefined'
+                    ? recipeDetail.nutritionalValues.fat + 'g'
+                    : 'k.A.'}
+                </span>
+              </div>
+            )}
           </div>
         </>
       )}
