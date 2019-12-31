@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-import RecipeCritiqueIcon from '../RecipeCritiqueIcon';
+import RecipeCritiqueIcon from '../../components/RecipeDifficulty';
+import RecipeDifficulty from '../../components/RecipeDifficulty';
+import RecipeHealthiness from '../../components/RecipeHealthiness';
 
 function RecipeListItem({
   title,
@@ -28,20 +30,8 @@ function RecipeListItem({
         <div className='recipe-text'>
           <div className='recipe-title'>{title && title}</div>
           {critique && <RecipeCritiqueIcon critiqueValue={critique} />}
-          {healthiness && (
-            <div className={'recipe-healthiness factor-' + healthiness}>
-              <i className='material-icons'>favorite</i>
-              <i className='material-icons'>favorite</i>
-              <i className='material-icons'>favorite</i>
-            </div>
-          )}
-          {difficulty && (
-            <div className={'recipe-difficulty factor-' + difficulty}>
-              <i></i>
-              <i></i>
-              <i></i>
-            </div>
-          )}
+          {healthiness && <RecipeHealthiness healthiness={healthiness} />}
+          {difficulty && <RecipeDifficulty difficultyValue={difficulty} />}
           {tags && (
             <div className='recipe-tags'>
               {tags.map(({ title }, key) => {

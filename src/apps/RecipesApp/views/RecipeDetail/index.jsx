@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import RecipeCritiqueIcon from '../RecipeCritiqueIcon';
+import RecipeCritiqueIcon from '../../components/RecipeCritiqueIcon';
+import RecipeDifficulty from '../../components/RecipeDifficulty';
+import RecipeHealthiness from '../../components/RecipeHealthiness';
 
 const calcUnits = ({ amount }, { servings }, servingAmount) =>
   (amount / servings) * servingAmount;
@@ -21,7 +23,6 @@ export default function RecipeDetails({ data }) {
           response.servings = parseInt(response.servings);
         }
         setRecipeDetail(response);
-        console.log(response);
         setIsLoading(false);
         setServingAmount(previousAmount => {
           if (!previousAmount) {
@@ -72,26 +73,10 @@ export default function RecipeDetails({ data }) {
           </div>
           <div className='recipe-text'>
             {recipeDetail.healthiness && (
-              <div
-                className={
-                  'recipe-healthiness factor-' + recipeDetail.healthiness
-                }
-              >
-                <i className='material-icons'>favorite</i>
-                <i className='material-icons'>favorite</i>
-                <i className='material-icons'>favorite</i>
-              </div>
+              <RecipeHealthiness healthiness={recipeDetail.healthiness} />
             )}
             {recipeDetail.difficulty && (
-              <div
-                className={
-                  'recipe-difficulty factor-' + recipeDetail.difficulty
-                }
-              >
-                <i></i>
-                <i></i>
-                <i></i>
-              </div>
+              <RecipeDifficulty difficulty={recipeDetail.difficulty} />
             )}
             <header>
               <h1 className='recipe-title'>{recipeDetail.title}</h1>
@@ -180,30 +165,29 @@ export default function RecipeDetails({ data }) {
                   <b>Kalorien:</b>
                   {recipeDetail.nutritionalValues.calories !== null &&
                   typeof recipeDetail.nutritionalValues.calories !== 'undefined'
-                    ? recipeDetail.nutritionalValues.calories + 'kcal'
+                    ? recipeDetail.nutritionalValues.calories + ' kcal'
                     : 'k.A.'}
-                  kcal
                 </span>
                 <span>
                   <b>Kohlenhydrate:</b>
                   {recipeDetail.nutritionalValues.carbohydrates !== null &&
                   typeof recipeDetail.nutritionalValues.carbohydrates !==
                     'undefined'
-                    ? recipeDetail.nutritionalValues.carbohydrates + 'g'
+                    ? recipeDetail.nutritionalValues.carbohydrates + ' g'
                     : 'k.A.'}
                 </span>
                 <span>
                   <b>Eiweiß:</b>
                   {recipeDetail.nutritionalValues.protein !== null &&
                   typeof recipeDetail.nutritionalValues.protein !== 'undefined'
-                    ? recipeDetail.nutritionalValues.protein + 'g'
+                    ? recipeDetail.nutritionalValues.protein + ' g'
                     : 'k.A.'}
                 </span>
                 <span>
                   <b>Fett:</b>
                   {recipeDetail.nutritionalValues.fat !== null &&
                   typeof recipeDetail.nutritionalValues.fat !== 'undefined'
-                    ? recipeDetail.nutritionalValues.fat + 'g'
+                    ? recipeDetail.nutritionalValues.fat + ' g'
                     : 'k.A.'}
                 </span>
               </div>

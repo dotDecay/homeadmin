@@ -4,7 +4,7 @@ import { Route } from 'react-router-dom';
 
 import { TagContextProvider } from './context';
 import { AppContainer, AppInner } from '../AppContainer';
-import { RecipeList, RecipeDetail } from './components';
+import { RecipeList, RecipeDetail } from './views';
 
 const recipeList = require('./apiTests/recipesOverview.json');
 const recipeDetail = require('./apiTests/recipeDetail.json');

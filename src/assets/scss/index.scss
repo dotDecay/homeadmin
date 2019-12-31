@@ -638,7 +638,7 @@ p {
   .recipe-text {
     position: relative;
     z-index: 2;
-    margin: -15px 10px 10px;
+    margin: -25px 10px 10px;
     padding: 30px 20px;
     @include border-radius(255px 15px 225px 15px/15px 225px 15px 255px);
 
@@ -911,7 +911,7 @@ p {
       margin-top: 10px;
 
       &:before {
-        content: 'Nährwerte';
+        content: 'Nährwerte pro Portion';
         font-weight: bold;
         text-transform: uppercase;
         font-size: 0.75rem;
