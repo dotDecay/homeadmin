@@ -45,6 +45,12 @@ export default function RecipesApp({ mainPath }) {
               <RecipeAddEdit />
             </AppInner>
           </Route>
+
+          <Route path={mainPath + '/edit/:itemid'} exact>
+            <AppInner title='Rezept bearbeiten' backToPath='/recipes'>
+              <RecipeAddEdit />
+            </AppInner>
+          </Route>
         </AppContainer>
       </TagContextProvider>
     </>

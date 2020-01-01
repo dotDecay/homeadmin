@@ -1,4 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+
 import { useTags } from '../../context/TagContext';
 
 const demo = false;
@@ -63,13 +65,6 @@ const AMOUNT_UNITS = {
   },
 };
 
-/*const AMOUNT_UNITS = [
-  ...AMOUNT_UNITS_VOLUMES,
-  ...AMOUNT_UNITS_WEIGHTINGS,
-  ...AMOUNT_UNITS_KITCHEN,
-  ...AMOUNT_UNITS_GENERAL,
-];*/
-
 const DUMMY_INGREDIENT = {
   title: '',
   amount: 1,
@@ -83,17 +78,49 @@ export default function RecipeAddEdit() {
   const [image, setImage] = useState('');
   const [step, setStep] = useState('');
 
+  // Tags laden
   const { tags } = useTags();
   useEffect(() => {
     setAvailableTags(tags);
   }, [tags, availableTags]);
 
+  // Falls bearbeiten dann Daten laden
+  let { itemid } = useParams();
+  useEffect(() => {
+    async function getData() {
+      try {
+        const response = await fetch(
+          'https://dotdecay.com/homeadmin/api/recipe/read_one.php?id=' + itemid,
+        );
+        const json = await response.json();
+        console.log(json);
+        setRecipe(json);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    getData();
+  }, [itemid]);
+
+  // submit
   async function handleSubmit(event) {
     event.preventDefault();
     setLoading(true);
 
+    let url = 'https://dotdecay.com/homeadmin/api/recipe/create.php';
+    // bearbeiten hat eine andere url
+    if (itemid) {
+      url = 'https://dotdecay.com/homeadmin/api/recipe/edit.php?id=' + itemid;
+    }
+
     try {
-      await fetch('https://dotdecay.com/homeadmin/api/recipe/create.php');
+      await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(recipe),
+      });
     } catch (error) {
       console.error(error);
     } finally {
@@ -417,13 +444,21 @@ export default function RecipeAddEdit() {
 
           <Block>
             <label>
-              Bewertung <CritiqueRating onChange={handleChange} />
+              Bewertung{' '}
+              <CritiqueRating
+                critique={recipe.critique}
+                onChange={handleChange}
+              />
             </label>
           </Block>
 
           <Block>
             <label>
-              Gesund <Healthiness onChange={handleChange} />
+              Gesund{' '}
+              <Healthiness
+                healthiness={recipe.healthiness}
+                onChange={handleChange}
+              />
             </label>
           </Block>
 
@@ -436,13 +471,18 @@ export default function RecipeAddEdit() {
                 onChange={handleChange}
                 min='0'
                 max='10000'
+                value={recipe.preparationTime}
               />
             </label>
           </Block>
 
           <Block>
             <label>
-              Schwierigkeitsgrad <Difficulty onChange={handleChange} />
+              Schwierigkeitsgrad{' '}
+              <Difficulty
+                difficulty={recipe.difficulty}
+                onChange={handleChange}
+              />
             </label>
           </Block>
 
@@ -450,13 +490,11 @@ export default function RecipeAddEdit() {
             <label>
               Nährwerte pro Portion{' '}
               <NutritionalValues
-                onChange={
-                  (recipe.nutritionalValues.calories,
-                  recipe.nutritionalValues.carbohydrates,
-                  recipe.nutritionalValues.protein,
-                  recipe.nutritionalValues.fat,
-                  handleChangeNutritionalValues)
-                }
+                calories={recipe.nutritionalValues.calories}
+                carbohydrates={recipe.nutritionalValues.carbohydrates}
+                protein={recipe.nutritionalValues.protein}
+                fat={recipe.nutritionalValues.fat}
+                onChange={handleChangeNutritionalValues}
               />
             </label>
           </Block>
@@ -530,79 +568,122 @@ function DeleteButton({ onClick }) {
   );
 }
 
-function Healthiness({ onChange }) {
+const healthinessOptions = [
+  {
+    label: 'keine Angabe',
+    value: '',
+  },
+  {
+    label: 'Ja',
+    value: 3,
+  },
+  {
+    label: 'Mittel',
+    value: 2,
+  },
+  {
+    label: 'Nein',
+    value: 1,
+  },
+];
+function Healthiness({ healthiness, onChange }) {
   return (
     <div className='healthiness-group'>
-      <label>
-        keine Angabe{' '}
-        <input type='radio' name='healthiness' value='' onChange={onChange} />
-      </label>
-
-      <label>
-        ja{' '}
-        <input type='radio' name='healthiness' value='3' onChange={onChange} />
-      </label>
-
-      <label>
-        mittel{' '}
-        <input type='radio' name='healthiness' value='2' onChange={onChange} />
-      </label>
-
-      <label>
-        nein{' '}
-        <input type='radio' name='healthiness' value='1' onChange={onChange} />
-      </label>
+      {healthinessOptions.map(({ label, value }, i) => {
+        const checked = healthiness === value;
+        return (
+          <label key={i}>
+            {label + ' '}
+            <input
+              type='radio'
+              name='healthiness'
+              value={value}
+              onChange={onChange}
+              checked={checked}
+            />
+          </label>
+        );
+      })}
     </div>
   );
 }
 
-function Difficulty({ onChange }) {
+const difficultyOptions = [
+  {
+    label: 'keine Angabe',
+    value: '',
+  },
+  {
+    label: 'Einfach',
+    value: 1,
+  },
+  {
+    label: 'Mittel',
+    value: 2,
+  },
+  {
+    label: 'Schwer',
+    value: 3,
+  },
+];
+function Difficulty({ difficulty, onChange }) {
   return (
     <div className='difficulty-group'>
-      <label>
-        keine Angabe{' '}
-        <input type='radio' name='difficulty' value='' onChange={onChange} />
-      </label>
-
-      <label>
-        Einfach{' '}
-        <input type='radio' name='difficulty' value='1' onChange={onChange} />
-      </label>
-
-      <label>
-        Mittel{' '}
-        <input type='radio' name='difficulty' value='2' onChange={onChange} />
-      </label>
-
-      <label>
-        Schwer{' '}
-        <input type='radio' name='difficulty' value='3' onChange={onChange} />
-      </label>
+      {difficultyOptions.map(({ label, value }, i) => {
+        const checked = difficulty === value;
+        return (
+          <label key={i}>
+            {label + ' '}
+            <input
+              type='radio'
+              name='difficulty'
+              value={value}
+              onChange={onChange}
+              checked={checked}
+            />
+          </label>
+        );
+      })}
     </div>
   );
 }
 
-function CritiqueRating({ onChange }) {
+const critiqueOptions = [
+  {
+    label: 'nicht gekocht',
+    value: '',
+  },
+  {
+    label: 'schlecht',
+    value: 1,
+  },
+  {
+    label: 'gut',
+    value: 2,
+  },
+  {
+    label: 'spitze',
+    value: 3,
+  },
+];
+function CritiqueRating({ critique, onChange }) {
   return (
     <div className='critique-group'>
-      <label>
-        nicht gekocht{' '}
-        <input type='radio' name='critique' value='' onChange={onChange} />
-      </label>
-
-      <label>
-        schlecht{' '}
-        <input type='radio' name='critique' value='1' onChange={onChange} />
-      </label>
-
-      <label>
-        gut <input type='radio' name='critique' value='2' onChange={onChange} />
-      </label>
-
-      <label>
-        spitze{' '}
-        <input type='radio' name='critique' value='3' onChange={onChange} />
-      </label>
+      {critiqueOptions.map(({ label, value }, i) => {
+        const checked = critique === value;
+        return (
+          <label key={i}>
+            {label + ' '}
+            <input
+              type='radio'
+              name='critique'
+              value={value}
+              onChange={onChange}
+              checked={checked}
+            />
+          </label>
+        );
+      })}
     </div>
   );
 }
