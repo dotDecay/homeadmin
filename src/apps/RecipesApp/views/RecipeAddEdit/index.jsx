@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { useTags } from '../../context/TagContext';
 
-const demo = true;
+const demo = false;
 
 const INITIAL_STATE = {
   title: '',
@@ -88,14 +88,17 @@ export default function RecipeAddEdit() {
     setAvailableTags(tags);
   }, [tags, availableTags]);
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     setLoading(true);
 
-    setTimeout(() => {
-      alert(JSON.stringify(recipe));
+    try {
+      await fetch('https://dotdecay.com/homeadmin/api/recipe/create.php');
+    } catch (error) {
+      console.error(error);
+    } finally {
       setLoading(false);
-    }, 1500);
+    }
   }
 
   function handleChange(event) {
