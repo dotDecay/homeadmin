@@ -4,19 +4,18 @@ import { Route } from 'react-router-dom';
 
 import { TagContextProvider } from './context';
 import { AppContainer, AppInner } from '../AppContainer';
-import { RecipeList, RecipeDetail } from './views';
-
-const recipeList = require('./apiTests/recipesOverview.json');
-const recipeDetail = require('./apiTests/recipeDetail.json');
-
-//const recipeListApp = require('http://homeadmin.dotdecay.com/api/recipe/read.php');
-//console.log(recipeListApp);
+import { RecipeList, RecipeDetail, RecipeAddEdit } from './views';
 
 const navItems = [
   {
     title: 'Rezepte',
     icon: <i className='material-icons'>local_dining</i>,
     to: '/recipes',
+  },
+  {
+    title: 'Hinzufügen',
+    icon: <i className='material-icons'>local_dining</i>,
+    to: '/recipes/add',
   },
 ];
 
@@ -31,13 +30,19 @@ export default function RecipesApp({ mainPath }) {
         <AppContainer navItems={navItems} className='recipe-app'>
           <Route path={mainPath} exact>
             <AppInner title='Rezepte'>
-              <RecipeList data={recipeList.recipes} />
+              <RecipeList />
             </AppInner>
           </Route>
 
           <Route path={mainPath + '/details/:itemid'} exact>
             <AppInner title='Rezepte Details' backToPath='/recipes'>
-              <RecipeDetail data={recipeDetail.recipe} />
+              <RecipeDetail />
+            </AppInner>
+          </Route>
+
+          <Route path={mainPath + '/add'} exact>
+            <AppInner title='Rezept hinzufügen' backToPath='/recipes'>
+              <RecipeAddEdit />
             </AppInner>
           </Route>
         </AppContainer>
