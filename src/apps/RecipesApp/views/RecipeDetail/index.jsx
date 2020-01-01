@@ -11,28 +11,38 @@ const calcUnits = ({ amount }, { servings }, servingAmount) =>
 export default function RecipeDetails({ data }) {
   const [servingAmount, setServingAmount] = useState(null);
   const [recipeDetail, setRecipeDetail] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   let { itemid } = useParams();
 
   useEffect(() => {
-    fetch(`https://dotdecay.com/homeadmin/api/recipe/read_one.php?id=` + itemid)
-      .then(res => res.json())
-      .then(response => {
-        if (response.servings) {
-          response.servings = parseInt(response.servings);
+    async function getData() {
+      try {
+        const response = await fetch(
+          'https://dotdecay.com/homeadmin/api/recipe/read_one.php?id=' + itemid,
+        );
+
+        const json = await response.json();
+
+        if (json.servings) {
+          json.servings = parseInt(json.servings);
         }
-        setRecipeDetail(response);
-        setIsLoading(false);
+        setRecipeDetail(json);
         setServingAmount(previousAmount => {
           if (!previousAmount) {
-            return response.servings;
+            return json.servings;
           }
 
           return previousAmount;
         });
-      })
-      .catch(error => console.log(error));
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    getData();
   }, [itemid]);
 
   const handleServingAmountChange = mode => {
@@ -54,7 +64,7 @@ export default function RecipeDetails({ data }) {
 
   return (
     <div className='recipe-details'>
-      {isLoading ? (
+      {loading ? (
         <p>Warte kurz. Ich lade die Rezept-Informationen für dich...</p>
       ) : (
         <>

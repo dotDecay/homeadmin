@@ -51,21 +51,29 @@ function RecipeListItem({
 
 export default function RecipeList({ data }) {
   const [recipeList, setRecipeList] = useState();
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`https://dotdecay.com/homeadmin/api/recipe/read.php`)
-      .then(res => res.json())
-      .then(response => {
-        setRecipeList(response.records);
-        setIsLoading(false);
-      })
-      .catch(error => console.log(error));
+    async function getData() {
+      try {
+        const response = await fetch(
+          'https://dotdecay.com/homeadmin/api/recipe/read.php',
+        );
+        const json = await response.json();
+        setRecipeList(json.records);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    getData();
   }, []);
 
   return (
     <div className='recipe-list'>
-      {isLoading ? (
+      {loading ? (
         <p>Warte kurz. Ich lade die Rezepte für dich...</p>
       ) : (
         recipeList &&
